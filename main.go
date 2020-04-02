@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	tgbot "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -17,7 +18,7 @@ func main() {
 		"/start":    func() string { return "Nice to meet you!" },
 		"hi":        func() string { return "Hi!" },
 		"poli":      func() string { return "sanam" },
-		"Go Corona": func() string { return "Corona Go" },
+		"go corona": func() string { return "Corona Go" },
 		"stayhome":  func() string { return "#veettilirimyre" },
 	}
 
@@ -28,8 +29,8 @@ func main() {
 		if update.Message == nil {
 			continue
 		}
-
-		resp, ok := responses[update.Message.Text]
+		str := update.Message.Text
+		resp, ok := responses[strings.ToLower(str)]
 		if !ok {
 			msg := tgbot.NewMessage(update.Message.Chat.ID, "Jaba jaba, Jabaabi jaba!")
 			bot.Send(msg)
