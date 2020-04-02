@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
-
+    "log"
 	tgbot "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -13,12 +13,14 @@ func main() {
 		panic(err)
 	}
 	fmt.Print("Bot Connected Successfully!\n")
+    	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	responses := map[string]func() string{
 		"/start":    func() string { return "Nice to meet you!" },
 		"hi":        func() string { return "Hi!" },
 		"poli":      func() string { return "sanam" },
 		"go corona": func() string { return "Corona Go" },
+		"sugalle" :func() string { return "Parama Sugam!" },
 		"stayhome":  func() string { return "#veettilirimyre" },
 	}
 
