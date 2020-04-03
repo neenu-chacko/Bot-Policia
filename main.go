@@ -72,7 +72,6 @@ func main() {
 
 				for _, user := range *update.Message.NewChatMembers {
 					restrict(bot, user, update.Message.Chat.UserName)
-
 				}
 
 				continue
@@ -85,6 +84,7 @@ func main() {
 
 				continue
 			}
+			continue
 		}
 
 		str := update.Message.Text
@@ -111,9 +111,10 @@ func restrict(bot *tgbot.BotAPI, user tgbot.User, chatID string) {
 	bot.RestrictChatMember(
 		tgbot.RestrictChatMemberConfig{
 			ChatMemberConfig: tgbot.ChatMemberConfig{
-				UserID:          user.ID,
-				ChannelUsername: chatID,
+				UserID:             user.ID,
+				SuperGroupUsername: chatID,
 			},
+			CanAddWebPagePreviews: true,
 		},
 	)
 }
