@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strings"
-    "log"
+
 	tgbot "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
@@ -23,14 +24,14 @@ func main() {
 		panic(err)
 	}
 	fmt.Print("Bot Connected Successfully!\n")
-    	log.Printf("Authorized on account %s", bot.Self.UserName)
+	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	responses := map[string]func() string{
 		"/start":    func() string { return "Nice to meet you!" },
 		"hi":        func() string { return "Hi!" },
 		"poli":      func() string { return "sanam" },
 		"go corona": func() string { return "Corona Go" },
-		"sugalle" :func() string { return "Parama Sugam!" },
+		"sugalle":   func() string { return "Parama Sugam!" },
 		"stayhome":  func() string { return "#veettilirimyre" },
 	}
 
@@ -51,6 +52,12 @@ func main() {
 				joinedUsers := strings.Join(newUsers, " ")
 				msg := tgbot.NewMessage(update.Message.Chat.ID, fmt.Sprintf("%s\n%s", welcome, joinedUsers))
 				bot.Send(msg)
+
+				for _, user := range *update.Message.NewChatMembers {
+					restrict(bot, user, update.Message.Chat.UserName)
+
+				}
+
 				continue
 			}
 
@@ -81,4 +88,15 @@ func getUserName(user tgbot.User) string {
 		return user.FirstName
 	}
 	return user.UserName
+}
+
+func restrict(bot *tgbot.BotAPI, user tgbot.User, chatID string) {
+	bot.RestrictChatMember(
+		tgbot.RestrictChatMemberConfig{
+			ChatMemberConfig: tgbot.ChatMemberConfig{
+				UserID:          user.ID,
+				ChannelUsername: chatID,
+			},
+		},
+	)
 }
